@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xts.mapper.FormMapper">
+
+    <select id="selectRanking" resultType="com.xts.pojo.Form">
+        SELECT
+            p.id AS shopId,
+            p.shop_name AS shopName,
+            p.image AS image,
+            SUM(o.quantity) AS totalQuantity,
+            SUM(o.total_price) AS totalSales
+        FROM
+            orders o
+        JOIN shop p ON o.shop_id = p.id
+        GROUP BY
+            p.id, p.shop_name, p.image
+        ORDER BY
+            totalSales DESC
+        LIMIT 10;
+    </select>
+
+    <select id="selectCategory" resultType="com.xts.pojo.Form">
+        SELECT
+            p.category,
+            SUM(o.total_price) AS categoryTotalSales
+        FROM
+            orders o
+                JOIN
+            shop p ON o.shop_id = p.id
+        GROUP BY
+            p.category;
+    </select>
+
+    <select id="selectDetail" resultType="com.xts.pojo.Form">
+        SELECT
+            p.id AS shopId,
+            p.shop_name AS shopName,
+            p.image,
+            p.category,
+            COUNT(o.id) AS salesCount,
+            SUM(o.quantity) AS totalQuantity,
+            SUM(o.total_price) AS totalSales,
+            SUM(o.quantity)*p.profit AS totalProfit
+        FROM
+            orders o
+                JOIN
+            shop p ON o.shop_id = p.id
+        GROUP BY
+            p.id
+        ORDER BY
+            p.id ASC
+    </select>
+
+    <select id="selectBasic" resultType="com.xts.pojo.Form">
+        SELECT
+            -- 销售相关
+            COUNT(DISTINCT o.id) as totalOrders,
+            SUM(o.total_price) as ordersTotalSales,
+            SUM(o.quantity) as ordersTotalQuantity,
+            SUM(o.total_price)/COUNT(DISTINCT o.id) as averageOrderPrice,
+
+            -- 利润相关
+            SUM(p.profit * o.quantity) as ordersTotalProfit,
+            (SUM(p.profit * o.quantity) / SUM(o.total_price) * 100) as profitRate,
+
+            -- 商品相关
+            (SELECT COUNT(*) FROM shop) as totalProducts,
+            COUNT(DISTINCT CASE
+                WHEN o.create_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                    THEN p.id END) as activeProducts
+        FROM
+            orders o
+                JOIN
+            shop p ON o.shop_id = p.id;
+    </select>
+</mapper>

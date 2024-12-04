@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: shop_site
+  #数据库连接信息
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shop_site
+    username: root
+    password: 381703
+  #文件上传的配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+  #发送邮件配置
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 2426446807@qq.com
+    password: lvkdcpthbzgudjcd
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.qq.com
+
+#mybatis配置
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+#spring事务管理日志
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug

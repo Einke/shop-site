@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xts.mapper.OrdersMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into orders(user_id, shop_id, quantity,total_price, state,create_time)
+        VALUES(#{userId},#{shopId},#{quantity},#{totalPrice},#{state},#{createTime})
+    </insert>
+
+    <update id="update">
+        update orders
+        <set>
+            <if test="userId!=null">user_id=#{userId},</if>
+            <if test="shopId!=null">shop_id=#{shopId},</if>
+            <if test="state!=null">state=#{state},</if>
+            <if test="totalPrice!=null">total_price=#{totalPrice},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateState2">
+        update orders
+        set state = 2
+        where id = #{id}
+    </update>
+
+    <update id="updateState1">
+        update orders
+        set state = 1
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from orders where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="list" resultType="com.xts.pojo.Orders">
+        select o.*,s.shop_name
+        from orders o
+        join shop s on s.id = o.shop_id
+        <where>
+            <if test="userId != null">o.user_id = #{userId}</if>
+            <if test="shopName != null and shopName != '' ">and s.shop_name like concat('%', #{shopName}, '%')</if>
+            <if test="state != null">and o.state = #{state}</if>
+            <if test="begin != null and end != null">and o.create_time between #{begin} and #{end}</if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.xts.pojo.Orders">
+        select o.*,s.shop_name,s.price
+        from orders o
+        join shop s on s.id = o.shop_id
+        where o.id = #{id}
+    </select>
+
+    <select id="adminList" resultType="com.xts.pojo.Orders">
+        select o.*,s.shop_name,s.price,u.username
+        from orders o
+        join shop s on s.id = o.shop_id
+        join user u on u.id = o.user_id
+        <where>
+            <if test="username != null and username != '' ">and u.username like concat('%', #{username}, '%')</if>
+            <if test="state != null">and o.state = #{state}</if>
+        </where>
+        order by o.create_time asc
+    </select>
+
+</mapper>

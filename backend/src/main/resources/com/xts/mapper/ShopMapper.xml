@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xts.mapper.ShopMapper">
+
+    <insert id="insert">
+        insert into shop(shop_name, category, price, profit, image, description, create_time, update_time)
+        VALUES(#{shopName},#{category},#{price},#{profit},#{image},#{description},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update">
+        update shop
+        <set>
+            <if test="shopName!=null and shopName!=''">shop_name = #{shopName},</if>
+            <if test="category!=null and category!=''">category = #{category},</if>
+            <if test="price!=null">price = #{price},</if>
+            <if test="profit!=null">profit = #{profit},</if>
+            <if test="image!=null and image!=''">image = #{image},</if>
+            <if test="description!=null and description!=''">description = #{description},</if>
+            <if test="updateTime!=null">update_time = #{updateTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from shop where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="list" resultType="com.xts.pojo.Shop">
+        select *
+        from shop
+        <where>
+            <if test="shopName != null and shopName != '' ">shop_name like concat('%', #{shopName}, '%')</if>
+            <if test="category != null and category != '' ">and category = #{category}</if>
+            <if test="minPrice != null and maxPrice != null">and price between #{minPrice} and #{maxPrice}</if>
+        </where>
+        <if test="sort != null and sort != ''">
+            ORDER BY price ${sort}
+        </if>
+        <if test="sort == null or sort == ''">
+            ORDER BY id desc
+        </if>
+    </select>
+
+    <select id="selectById" resultType="com.xts.pojo.Shop">
+        select * from shop where id=#{id}
+    </select>
+
+</mapper>

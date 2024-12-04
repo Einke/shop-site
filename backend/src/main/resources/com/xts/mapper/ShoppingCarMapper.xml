@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xts.mapper.ShoppingCarMapper">
+
+    <insert id="insert">
+        insert into shoppingcar(user_id, shop_id, quantity, create_time, update_time)
+        VALUES(#{userId},#{shopId},#{quantity},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update">
+        update shoppingcar
+        <set>
+            <if test="userId!=null">user_id=#{userId},</if>
+            <if test="shopId!=null">shop_id=#{shopId},</if>
+            <if test="quantity!=null">quantity=#{quantity},</if>
+            <if test="updateTime!=null">update_time=#{updateTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from shoppingcar where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="list" resultType="com.xts.pojo.ShoppingCar">
+        SELECT sc.*,s.shop_name,s.price
+        FROM shoppingcar sc
+        JOIN shop s ON sc.shop_id = s.id
+        <where>
+            <if test="userId != null">sc.user_id = #{userId}</if>
+            <if test="shopName != null and shopName != '' ">and s.shop_name like concat('%', #{shopName}, '%')</if>
+            <if test="begin != null and end != null">and sc.create_time between #{begin} and #{end}</if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.xts.pojo.ShoppingCar">
+        select sc.*,s.price,s.shop_name
+        from shoppingcar sc
+        join shop s on sc.shop_id = s.id
+        where sc.id = #{id}
+    </select>
+
+</mapper>

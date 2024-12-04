@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xts.mapper.BrowseLogMapper">
+
+    <insert id="insert">
+        insert into browse_logs (user_id, shop_id, operate_time, cost_time)
+        VALUES (#{userId}, #{shopId}, #{operateTime}, #{costTime})
+    </insert>
+
+    <select id="list" resultType="com.xts.pojo.BrowseLog">
+        select b.*,u.username,s.shop_name
+        from browse_logs b
+        join user u on u.id = b.user_id
+        join shop s on s.id = b.shop_id
+        <where>
+            <if test="username != null and username != '' ">u.username like concat('%', #{username}, '%')</if>
+        </where>
+        order by b.user_id asc
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
