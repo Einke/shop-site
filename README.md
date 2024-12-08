@@ -2,6 +2,8 @@
 
 ​									计科1班 许钿胜  202230443194
 
+frontend为前端代码，使用vue，backend为后端代码，使用springboot。主要代码都在src文件夹下。
+
 ### 介绍：
 
 该网站使用vue3+springboot+mybatis+mysql进行开发，基本实现购物网站的正常功能。
