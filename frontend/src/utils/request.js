@@ -4,7 +4,8 @@ import router from '@/router'  // 引入路由实例
 
 // 创建axios实例
 const request = axios.create({
-  baseURL: 'http://localhost:8080',
+  //baseURL: 'http://localhost:8080',
+  baseURL:'http://106.52.81.164:9090',
   timeout: 5000  // 请求超时时间
 })
 

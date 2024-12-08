@@ -60,11 +60,9 @@
             SUM(o.total_price) as ordersTotalSales,
             SUM(o.quantity) as ordersTotalQuantity,
             SUM(o.total_price)/COUNT(DISTINCT o.id) as averageOrderPrice,
-
             -- 利润相关
             SUM(p.profit * o.quantity) as ordersTotalProfit,
             (SUM(p.profit * o.quantity) / SUM(o.total_price) * 100) as profitRate,
-
             -- 商品相关
             (SELECT COUNT(*) FROM shop) as totalProducts,
             COUNT(DISTINCT CASE

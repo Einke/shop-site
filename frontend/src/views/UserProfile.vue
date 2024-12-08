@@ -136,8 +136,6 @@ const submitChanges = () => {
     ElMessage.success('信息修改成功')
     dialogFormVisible.value = false
     store.dispatch('getUserInfo')
-  }).catch(error => {
-    ElMessage.error('信息修改失败')
   })
 }
 

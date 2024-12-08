@@ -81,7 +81,12 @@ router.beforeEach((to, from, next) => {
   // 如果是管理员，除了 /admin 开头的路由，都重定向到 /admin
   if (userId === '5' && !to.path.startsWith('/admin')) {
     next('/admin')
-  } else {
+  } 
+  // 如果 userId 不是 5，且访问 /admin 路由，禁止访问，并回到首页
+  else if (userId && userId !== '5' && to.path.startsWith('/admin')) {
+    next('/') 
+  }
+  else {
     next()
   }
 })

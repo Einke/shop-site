@@ -58,7 +58,6 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
      */
     @Override
     public void insert(ShoppingCar shoppingCar) {
-        //shoppingCar.setUserId(userId);
         shoppingCar.setCreateTime(LocalDateTime.now());
         shoppingCar.setUpdateTime(LocalDateTime.now());
         shoppingCarMapper.insert(shoppingCar);

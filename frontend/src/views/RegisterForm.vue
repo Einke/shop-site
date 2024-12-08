@@ -101,9 +101,12 @@ const handleRegister = () => {
     request.post('/register', registerForm).then(response => {
       ElMessage.success('注册成功！')
       window.location.href = '/login' // 跳转到登录界面
-      //router.push('/login') // 跳转到登录界面
     })
   }
+}
+
+const goToHome = () => {
+  router.push('/')
 }
 </script>
 

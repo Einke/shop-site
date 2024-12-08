@@ -59,7 +59,7 @@ public class UserController {
     }
 
     /**
-     * 根据id删除用户，可批量
+     * 根据id删除用户
      * @param ids
      * @return
      */

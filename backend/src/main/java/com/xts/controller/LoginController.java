@@ -25,9 +25,7 @@ public class LoginController {
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
         log.info("用户登录：{}", user);
-
         User u = userService.login(user);
-
         if(u!=null){
             Map<String, Object> claims = new HashMap<>();
             claims.put("id", u.getId());
@@ -35,7 +33,6 @@ public class LoginController {
             String jwt= JwtUtils.generateJwt(claims);
             return Result.success(jwt);
         }
-
         return Result.error("用户名或密码错误");
     }
 }
